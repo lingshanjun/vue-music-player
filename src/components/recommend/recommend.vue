@@ -14,7 +14,7 @@
       <ul>
         <li class="item" v-for="(item, index) in songSets" :key="index">
           <div class="icon">
-            <img :src="item.picUrl" alt="" width="100%">
+            <img v-lazy="item.picUrl" alt="" width="100%">
           </div>
           <div class="text">
             <p class="desc">{{item.songListDesc}}</p>

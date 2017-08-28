@@ -3,7 +3,9 @@
     <div class="slider" :style="{height: sliderH + 'px'}" v-if="sliders.length">
       <swipe :auto="4000">
         <swipe-item class="slider-item" v-for="(item, index) in sliders" :key="index">
-          <img :src="item.picUrl" alt="" width="100%" height="100%">
+          <a :href="item.linkUrl">
+            <img :src="item.picUrl" alt="" width="100%" height="100%">
+          </a>
         </swipe-item>
       </swipe>
     </div>

@@ -8,3 +8,5 @@ export const commonParams = {
   platform: 'h5',
   needNewCode: 1
 };
+
+export const OK = 0;

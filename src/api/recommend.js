@@ -10,6 +10,6 @@ export function getRecommendSliders() {
   return axios.get(url, {
     params: data
   }).then(res => {
-    return Promise.resolve(res.data);
+    return Promise.resolve(res.data.data.slider);
   });
 }

@@ -1,11 +1,14 @@
 <template>
   <div class="singer">
     <list-view :groups="groups" @selectItem="selectSinger"></list-view>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script>
 import _ from 'lodash';
+import { mapMutations } from 'vuex';
 import { getSingerList } from '@api/singer';
 import { OK } from '@api/config';
 import ListView from '@base/list-view';
@@ -30,10 +33,14 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
     selectSinger (singer) {
       this.$router.push({
         path: `/singer/${singer.id}`
       });
+      this.setSinger(singer);
     },
     _getSingerList () {
       getSingerList().then(res => {

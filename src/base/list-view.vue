@@ -5,7 +5,7 @@
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
           <li class="list-group-item" v-for="(item, key) in group.items" :key="key">
-            <img class="avatar" :src="item.avatar" alt="">
+            <img class="avatar" v-lazy="item.avatar" alt="">
             <span class="name">{{item.name}}</span>
           </li>
         </ul>
@@ -16,6 +16,9 @@
         {{value}}
       </li>
     </ul>
+    <!-- <div class="sticky">
+          <div class="sticky-title">{{stickyTitle}}</div>
+        </div> -->
   </div>
 </template>
 <script>
@@ -29,7 +32,8 @@ export default {
 
   data () {
     return {
-      curIndex: 0
+      curIndex: 0,
+      stickyTitle: '标题'
     };
   },
 
@@ -46,7 +50,7 @@ export default {
 @import '../common/scss/variable.scss';
 
 .listview {
-  // position: relative;
+  position: relative;
   background: $color-background;
   .list-group {
     padding-bottom: 30px;
@@ -78,6 +82,7 @@ export default {
     position: fixed;
     right: 10px;
     top: 60%;
+    z-index: 9;
     transform: translateY(-50%);
     width: 20px;
     padding: 20px 0;
@@ -93,6 +98,21 @@ export default {
       &.active {
         color: $color-theme;
       }
+    }
+  }
+  .sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    width: 100%;
+    .sticky-title {
+      height: 30px;
+      line-height: 30px;
+      padding-left: 20px;
+      font-size: $font-size-small;
+      color: $color-text-l;
+      background: $color-highlight-background;
     }
   }
 }

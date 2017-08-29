@@ -4,7 +4,7 @@
       <li class="list-group" v-for="(group, index) in groups" :key="index">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li class="list-group-item" v-for="(item, key) in group.items" :key="key">
+          <li class="list-group-item" v-for="(item, key) in group.items" :key="key" @click="selectItem(item)">
             <img class="avatar" v-lazy="item.avatar" alt="">
             <span class="name">{{item.name}}</span>
           </li>
@@ -16,9 +16,11 @@
         {{value}}
       </li>
     </ul>
-    <!-- <div class="sticky">
-          <div class="sticky-title">{{stickyTitle}}</div>
-        </div> -->
+    <!-- 
+      <div class="sticky">
+        <div class="sticky-title">{{stickyTitle}}</div>
+      </div>
+       -->
   </div>
 </template>
 <script>
@@ -42,6 +44,12 @@ export default {
       return this.groups.map((group) => {
         return group.title.substr(0, 1);
       });
+    }
+  },
+
+  methods: {
+    selectItem (item) {
+      this.$emit('selectItem', item);
     }
   }
 };

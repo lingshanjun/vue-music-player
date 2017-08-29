@@ -10,3 +10,7 @@ export const commonParams = {
 };
 
 export const OK = 0;
+
+export const options = {
+  param: 'jsonpCallback'
+};

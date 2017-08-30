@@ -1,9 +1,7 @@
 <template>
   <div class="singer">
     <list-view :groups="groups" @selectItem="selectSinger"></list-view>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>

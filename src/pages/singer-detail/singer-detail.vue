@@ -8,8 +8,14 @@
 import { mapGetters } from 'vuex';
 import { OK } from '@api/config';
 import { getSingerDetail } from '@api/singer';
+import { createSong } from '@assets/js/song';
 
 export default {
+  data () {
+    return {
+      songs: []
+    };
+  },
   computed: {
     ...mapGetters([
       'singer'
@@ -26,9 +32,20 @@ export default {
       }
       getSingerDetail(this.singer.id).then(res => {
         if (res.code === OK) {
-          console.log(res.data);
+          this.songs = this._normalizeSongs(res.data.list);
+          console.log(this.songs);
         }
       });
+    },
+    _normalizeSongs (list) {
+      let ret = [];
+      list.forEach(item => {
+        let { musicData } = item;
+        if (musicData.songid && musicData.albummid) {
+          ret.push(createSong(musicData));
+        }
+      });
+      return ret;
     }
   }
 

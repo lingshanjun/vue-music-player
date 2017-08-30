@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Recommend from '@components/recommend/recommend';
-import Singer from '@components/singer/singer';
-import Rank from '@components/rank/rank';
-import Search from '@components/search/search';
-import SingerDetail from '@components/singer-detail/singer-detail';
+import Recommend from '@pages/recommend/recommend';
+import Singer from '@pages/singer/singer';
+import Rank from '@pages/rank/rank';
+import Search from '@pages/search/search';
+import SingerDetail from '@pages/singer-detail/singer-detail';
 
 Vue.use(Router);
 

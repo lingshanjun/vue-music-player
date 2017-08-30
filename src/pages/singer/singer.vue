@@ -11,8 +11,8 @@ import _ from 'lodash';
 import { mapMutations } from 'vuex';
 import { getSingerList } from '@api/singer';
 import { OK } from '@api/config';
-import ListView from '@base/list-view';
-import Singer from '@common/js/singer';
+import ListView from '@basecomponents/list-view/list-view';
+import Singer from '@assets/js/singer';
 
 const HOT_SINGER_LEN = 10;
 const HOT_NAME = '热门';

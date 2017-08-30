@@ -17,10 +17,10 @@
       </li>
     </ul>
     <!-- 
-      <div class="sticky">
-        <div class="sticky-title">{{stickyTitle}}</div>
-      </div>
-       -->
+          <div class="sticky">
+            <div class="sticky-title">{{stickyTitle}}</div>
+          </div>
+           -->
   </div>
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '../common/scss/variable.scss';
+@import '../../assets/scss/variable.scss';
 
 .listview {
   position: relative;

@@ -7,13 +7,13 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-import '@common/scss/index.scss';
+import '@assets/scss/index.scss';
 
 Vue.config.productionTip = false;
 fastclick.attach(document.body);
 
 Vue.use(VueLazyload, {
-  loading: require('@common/image/default.png')
+  loading: require('@assets/image/default.png')
 });
 
 /* eslint-disable no-new */

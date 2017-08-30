@@ -8,3 +8,8 @@ html {
   background: $color-background;
   color: $color-text;
 }
+
+body{
+  height: 100%;
+  overflow: hidden;
+}

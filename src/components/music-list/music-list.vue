@@ -20,12 +20,16 @@
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
+      <div class="loading-wrapper" v-show="!songs.length">
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
 <script>
 import Scroll from '@basecomponents/scroll/scroll';
 import SongList from '@basecomponents/song-list/song-list';
+import Loading from '@basecomponents/loading/loading';
 import { prefixStyle } from '@assets/js/dom';
 
 const RESERVED_HEIGHT = 40; // 预留高度--标题的高度
@@ -106,7 +110,8 @@ export default {
   },
   components: {
     Scroll,
-    SongList
+    SongList,
+    Loading
   }
 };
 </script>
@@ -206,6 +211,12 @@ export default {
     background-color: $color-background;
     .song-list-wrapper {
       padding: 20px 30px;
+    }
+    .loading-wrapper {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 }

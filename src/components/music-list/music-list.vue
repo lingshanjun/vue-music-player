@@ -18,7 +18,7 @@
 
     <scroll class="list" ref="list" :data="songs" :probe-type="3" :listen-scroll="true" @scroll="scroll">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" @selectItem="selectItem"></song-list>
       </div>
       <div class="loading-wrapper" v-show="!songs.length">
         <loading></loading>
@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
 import Scroll from '@basecomponents/scroll/scroll';
 import SongList from '@basecomponents/song-list/song-list';
 import Loading from '@basecomponents/loading/loading';
@@ -74,7 +75,16 @@ export default {
     },
     scroll (pos) {
       this.scrollY = pos.y;
-    }
+    },
+    selectItem (song, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      });
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   watch: {
     scrollY (newVal) {

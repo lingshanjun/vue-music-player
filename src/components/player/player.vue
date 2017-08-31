@@ -39,7 +39,7 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <!-- progress bar -->
+              <progress-bar :percent="percent"></progress-bar>
             </div>
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
@@ -88,6 +88,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 import animations from 'create-keyframe-animation';
 import { prefixStyle } from '@assets/js/dom';
+import ProgressBar from '@basecomponents/progress-bar/progress-bar';
 
 const transform = prefixStyle('transform');
 // const transitionDuration = prefixStyle('transitionDuration');
@@ -102,6 +103,9 @@ export default {
   computed: {
     disableClass () {
       return this.songReady ? '' : 'disable';
+    },
+    percent () {
+      return this.currentTime / this.currentSong.duration;
     },
     ...mapGetters([
       'playList',
@@ -237,6 +241,9 @@ export default {
         newPlaying ? audio.play() : audio.pause();
       });
     }
+  },
+  components: {
+    ProgressBar
   }
 };
 </script>
@@ -394,24 +401,25 @@ export default {
           }
         }
       }
-      .progress-wrappr {
+      .progress-wrapper {
         display: flex;
         align-items: center;
-        width: 80px;
+        width: 80%;
         margin: 0 auto;
         padding: 10px 0;
-        .item {
+        .time {
           flex: 0 0 30px;
           width: 30px;
           line-height: 30px;
           color: $color-text;
           font-size: $font-size-small;
-          &.item-l {
-            text-align: left;
-            ;
+          &.time-l {
+            text-align: justify;
+            margin-right: 4px;
           }
-          &.item-r {
-            text-align: right;
+          &.time-r {
+            text-align: justify;
+            margin-left: 4px;
           }
         }
         .progress-bar-wrapper {

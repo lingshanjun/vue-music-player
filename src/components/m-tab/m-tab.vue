@@ -19,7 +19,7 @@ export default {
 
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../assets/scss/variable.scss';
 
 .m-tab {

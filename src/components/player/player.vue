@@ -15,7 +15,7 @@
         <div class="middle">
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
+              <div class="cd" :class="[playing ? 'play': 'pause']">
                 <img class="image" :src="currentSong.image" alt="">
               </div>
             </div>
@@ -44,20 +44,20 @@
             <span class="time time-r"></span>
           </div>
           <div class="operators">
-            <div class="icon i-left">
-              <i></i>
+            <div class="icon">
+              <i class="icon-sequence"></i>
             </div>
-            <div class="icon i-left">
+            <div class="icon">
               <i class="icon-prev"></i>
             </div>
-            <div class="icon i-center">
-              <i></i>
+            <div class="icon" @click="togglePlaying">
+              <i :class="[playing ? 'icon-pause': 'icon-play']"></i>
             </div>
-            <div class="icon i-right">
+            <div class="icon">
               <i class="icon-next"></i>
             </div>
-            <div class="icon i-right">
-              <i class="icon"></i>
+            <div class="icon">
+              <i class="icon-not-favorite"></i>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="openFullScreen">
         <div class="icon">
-          <img :src="currentSong.image" alt="" width="40" height="40">
+          <img :src="currentSong.image" alt="" width="40" height="40" :class="[playing ? 'play': 'pause']">
         </div>
         <div class="text">
           <h2 class="name">{{currentSong.name}}</h2>
@@ -74,12 +74,14 @@
         </div>
         <div class="control">
           <!-- process circle -->
+          <i :class="[playing ? 'icon-pause-mini': 'icon-play-mini']" @click.stop="togglePlaying"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <audio :src="currentSong.url" ref="audio"></audio>
   </div>
 </template>
 <script>
@@ -95,7 +97,8 @@ export default {
     ...mapGetters([
       'playList',
       'fullScreen',
-      'currentSong'
+      'currentSong',
+      'playing'
     ])
   },
   methods: {
@@ -105,6 +108,11 @@ export default {
     openFullScreen () {
       this.setFullScreen(true);
     },
+    togglePlaying () {
+      this.setPlayingState(!this.playing);
+    },
+
+    // 唱片过渡动画 begin
     enter (el, done) {
       const { x, y, scale } = this._getPosAndScale();
 
@@ -145,6 +153,7 @@ export default {
       this.$refs.cdWrapper.style.transition = '';
       this.$refs.cdWrapper.style[transform] = '';
     },
+    // 唱片过渡动画 end
     _getPosAndScale () {
       const targetWidth = 40;
       const paddingLeft = 40;
@@ -161,8 +170,22 @@ export default {
       };
     },
     ...mapMutations({
-      'setFullScreen': 'SET_FULL_SCREEN'
+      'setFullScreen': 'SET_FULL_SCREEN',
+      'setPlayingState': 'SET_PLAYING_STATE'
     })
+  },
+  watch: {
+    currentSong (newSong, oldSong) {
+      this.$nextTick(() => {
+        this.$refs.audio.play();
+      });
+    },
+    playing (newPlaying) {
+      const audio = this.$refs.audio;
+      this.$nextTick(() => {
+        newPlaying ? audio.play() : audio.pause();
+      });
+    }
   }
 };
 </script>
@@ -206,7 +229,7 @@ export default {
         }
       }
       .title {
-        width: 70px;
+        width: 70%;
         margin: 0 auto;
         line-height: 40px;
         text-align: center;
@@ -347,8 +370,9 @@ export default {
       .operators {
         display: flex;
         align-items: center;
+        justify-content: space-around;
+        padding: 0 20px;
         .icon {
-          flex: 1;
           color: $color-theme;
           &.disable {
             color: $color-theme-d;
@@ -356,22 +380,13 @@ export default {
           i {
             font-size: 30px;
           }
-        }
-        .icon-left {
-          text-align: right;
-        }
-        .icon-center {
-          padding: 0 20px;
-          text-align: center;
-          i {
+          .icon-play,
+          .icon-pause {
             font-size: 40px;
           }
-        }
-        .icon-right {
-          text-align: left;
-        }
-        .icon-favorite {
-          color: $color-sub-theme;
+          .icon-favorite {
+            color: $color-sub-theme;
+          }
         }
       }
     }
@@ -452,14 +467,8 @@ export default {
       .icon-play-mini,
       .icon-pause-mini,
       .icon-playlist {
-        font-size: 30px;
-        color: $color-theme-d;
-      }
-      .icon-mini {
         font-size: 32px;
-        position: absolute;
-        left: 0;
-        top: 0;
+        color: $color-theme-d;
       }
     }
   }

@@ -44,8 +44,8 @@
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon">
-              <i class="icon-sequence"></i>
+            <div class="icon" @click="changeMode">
+              <i :class="modeIcon"></i>
             </div>
             <div class="icon" @click="prev" :class="disableClass">
               <i class="icon-prev"></i>
@@ -89,6 +89,8 @@
 import { mapGetters, mapMutations } from 'vuex';
 import animations from 'create-keyframe-animation';
 import { prefixStyle } from '@assets/js/dom';
+import { playMode } from '@assets/js/config';
+import { shuffle } from '@assets/js/util';
 import ProgressBar from '@basecomponents/progress-bar/progress-bar';
 import ProgressCircle from '@basecomponents/progress-circle/progress-circle';
 
@@ -106,6 +108,11 @@ export default {
     disableClass () {
       return this.songReady ? '' : 'disable';
     },
+    modeIcon () {
+      return (this.mode === playMode.sequence && 'icon-sequence') ||
+        (this.mode === playMode.loop && 'icon-loop') ||
+        (this.mode === playMode.random && 'icon-random');
+    },
     percent () {
       return this.currentTime / this.currentSong.duration;
     },
@@ -114,7 +121,9 @@ export default {
       'fullScreen',
       'currentSong',
       'playing',
-      'currentIndex'
+      'currentIndex',
+      'mode',
+      'sequenceList'
     ])
   },
   methods: {
@@ -171,6 +180,24 @@ export default {
     progressBarChange (percent) {
       const currentTime = this.currentSong.duration * percent;
       this.$refs.audio.currentTime = currentTime;
+    },
+    changeMode () {
+      const mode = (this.mode + 1) % 3;
+      this.setPlayMode(mode);
+      let list = null;
+      if (mode === playMode.random) {
+        list = shuffle(this.sequenceList);
+      } else {
+        list = this.sequenceList;
+      }
+      this.restCurrentIndex(list);
+      this.setPlayList(list);
+    },
+    restCurrentIndex (list) {
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id;
+      });
+      this.setCurrentIndex(index);
     },
     // 唱片过渡动画 begin
     enter (el, done) {
@@ -232,11 +259,16 @@ export default {
     ...mapMutations({
       'setFullScreen': 'SET_FULL_SCREEN',
       'setPlayingState': 'SET_PLAYING_STATE',
-      'setCurrentIndex': 'SET_CURRENT_INDEX'
+      'setCurrentIndex': 'SET_CURRENT_INDEX',
+      'setPlayMode': 'SET_PLAY_MODE',
+      'setPlayList': 'SET_PLAY_LIST'
     })
   },
   watch: {
     currentSong (newSong, oldSong) {
+      if (newSong.id === oldSong.id) {
+        return;
+      }
       this.$nextTick(() => {
         this.$refs.audio.play();
       });

@@ -39,7 +39,7 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent"></progress-bar>
+              <progress-bar :percent="percent" @percentChange="progressBarChange"></progress-bar>
             </div>
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
@@ -73,8 +73,9 @@
           <p class="desc">{{currentSong.singer}}</p>
         </div>
         <div class="control">
-          <!-- process circle -->
-          <i :class="[playing ? 'icon-pause-mini': 'icon-play-mini']" @click.stop="togglePlaying"></i>
+          <progress-circle :radius="32" :percent="percent">
+            <i class="icon-mini" :class="[playing ? 'icon-pause-mini': 'icon-play-mini']" @click.stop="togglePlaying"></i>
+          </progress-circle>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
@@ -89,6 +90,7 @@ import { mapGetters, mapMutations } from 'vuex';
 import animations from 'create-keyframe-animation';
 import { prefixStyle } from '@assets/js/dom';
 import ProgressBar from '@basecomponents/progress-bar/progress-bar';
+import ProgressCircle from '@basecomponents/progress-circle/progress-circle';
 
 const transform = prefixStyle('transform');
 // const transitionDuration = prefixStyle('transitionDuration');
@@ -165,6 +167,10 @@ export default {
       const minute = ('0' + (interval / 60 | 0)).substr(-2);
       const second = ('0' + (interval % 60)).substr(-2);
       return `${minute}:${second}`;
+    },
+    progressBarChange (percent) {
+      const currentTime = this.currentSong.duration * percent;
+      this.$refs.audio.currentTime = currentTime;
     },
     // 唱片过渡动画 begin
     enter (el, done) {
@@ -243,7 +249,8 @@ export default {
     }
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    ProgressCircle
   }
 };
 </script>
@@ -528,6 +535,12 @@ export default {
       .icon-playlist {
         font-size: 32px;
         color: $color-theme-d;
+      }
+      .icon-mini {
+        font-size: 32px;
+        position: absolute;
+        left: 0;
+        top: 0;
       }
     }
   }

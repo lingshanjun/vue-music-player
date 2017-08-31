@@ -37,11 +37,11 @@
             <span class="dot"></span>
           </div>
           <div class="progress-wrapper">
-            <span class="time time-l"></span>
+            <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
               <!-- progress bar -->
             </div>
-            <span class="time time-r"></span>
+            <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators">
             <div class="icon">
@@ -81,7 +81,7 @@
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
   </div>
 </template>
 <script>
@@ -95,7 +95,8 @@ const transform = prefixStyle('transform');
 export default {
   data () {
     return {
-      songReady: false
+      songReady: false,
+      currentTime: 0
     };
   },
   computed: {
@@ -151,6 +152,15 @@ export default {
     },
     error () {
       this.songReady = true;
+    },
+    updateTime (e) {
+      this.currentTime = e.target.currentTime;
+    },
+    formatTime (interval) {
+      interval = interval | 0;
+      const minute = ('0' + (interval / 60 | 0)).substr(-2);
+      const second = ('0' + (interval % 60)).substr(-2);
+      return `${minute}:${second}`;
     },
     // 唱片过渡动画 begin
     enter (el, done) {

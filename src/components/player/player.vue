@@ -2,20 +2,20 @@
   <div class="player" v-show="playList.length">
     <div class="normal-player" v-show="fullScreen">
       <div class="background">
-        <img src="" alt="" width="100%" height="100%">
+        <img :src="currentSong.image" alt="" width="100%" height="100%">
       </div>
       <div class="top">
-        <div class="back">
+        <div class="back" @click="closeFullScreen">
           <i class="icon-back"></i>
         </div>
-        <h1 class="title">标题</h1>
-        <h2 class="subtitle">副标题</h2>
+        <h1 class="title">{{currentSong.name}}</h1>
+        <h2 class="subtitle">{{currentSong.singer}}</h2>
       </div>
       <div class="middle">
         <div class="middle-l">
           <div class="cd-wrapper">
             <div class="cd">
-              <img class="image" src="" alt="">
+              <img class="image" :src="currentSong.image" alt="">
             </div>
           </div>
           <div class="playing-lyric-wrapper">
@@ -61,13 +61,13 @@
         </div>
       </div>
     </div>
-    <div class="mini-player" v-show="!fullScreen">
+    <div class="mini-player" v-show="!fullScreen" @click="openFullScreen">
       <div class="icon">
-        <img src="" alt="" width="40" height="40">
+        <img :src="currentSong.image" alt="" width="40" height="40">
       </div>
       <div class="text">
-        <h2 class="name">mingzi</h2>
-        <p class="desc">singer</p>
+        <h2 class="name">{{currentSong.name}}</h2>
+        <p class="desc">{{currentSong.singer}}</p>
       </div>
       <div class="control">
         <!-- process circle -->
@@ -79,14 +79,26 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   computed: {
     ...mapGetters([
       'playList',
-      'fullScreen'
+      'fullScreen',
+      'currentSong'
     ])
+  },
+  methods: {
+    closeFullScreen () {
+      this.setFullScreen(false);
+    },
+    openFullScreen () {
+      this.setFullScreen(true);
+    },
+    ...mapMutations({
+      'setFullScreen': 'SET_FULL_SCREEN'
+    })
   }
 };
 </script>

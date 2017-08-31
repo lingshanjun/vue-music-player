@@ -47,13 +47,13 @@
             <div class="icon">
               <i class="icon-sequence"></i>
             </div>
-            <div class="icon" @click="prev">
+            <div class="icon" @click="prev" :class="disableClass">
               <i class="icon-prev"></i>
             </div>
-            <div class="icon" @click="togglePlaying">
+            <div class="icon" @click="togglePlaying" :class="disableClass">
               <i :class="[playing ? 'icon-pause': 'icon-play']"></i>
             </div>
-            <div class="icon" @click="next">
+            <div class="icon" @click="next" :class="disableClass">
               <i class="icon-next"></i>
             </div>
             <div class="icon">
@@ -81,7 +81,7 @@
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url" ref="audio" @canplay="ready"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error"></audio>
   </div>
 </template>
 <script>
@@ -99,6 +99,9 @@ export default {
     };
   },
   computed: {
+    disableClass () {
+      return this.songReady ? '' : 'disable';
+    },
     ...mapGetters([
       'playList',
       'fullScreen',
@@ -144,6 +147,9 @@ export default {
       this.songReady = false;
     },
     ready () {
+      this.songReady = true;
+    },
+    error () {
       this.songReady = true;
     },
     // 唱片过渡动画 begin
